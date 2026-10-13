@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="hi">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spirit Blade — 1v1</title>
+<style>
+body{margin:0;background:#111;color:#fff;font-family:system-ui;text-align:center}
+canvas{display:block;margin:auto;background:linear-gradient(#17213a,#080b12);max-width:100%;touch-action:none}
+button{font-size:20px;padding:10px 16px;margin:5px;border:0;border-radius:10px}
+</style>
+<h2>⚔️ Spirit Blade — 1v1</h2>
+<canvas id="g" width="900" height="500"></canvas>
+<p>मोबाइल: ◀ ▶ से चलें • ⚔️ Attack • ✨ Special</p>
+<button ontouchstart="p.v=-1" ontouchend="p.v=0">◀</button>
+<button ontouchstart="p.v=1" ontouchend="p.v=0">▶</button>
+<button onclick="attack()">⚔️</button><button onclick="special()">✨</button>
+<script>
+const c=document.querySelector('#g'),x=c.getContext('2d'); let p={x:180,y:390,v:0,h:100,cd:0},e={x:720,y:390,h:100,cd:0};
+onkeydown=q=>{if(q.key==='ArrowLeft')p.v=-1;if(q.key==='ArrowRight')p.v=1;if(q.key===' ')attack();if(q.key==='e')special()};
+onkeyup=q=>{if(q.key==='ArrowLeft'||q.key==='ArrowRight')p.v=0};
+function hit(d){e.h=Math.max(0,e.h-d)}
+function attack(){if(p.cd)return;p.cd=18;if(Math.abs(p.x-e.x)<130)hit(12)}
+function special(){if(p.cd)return;p.cd=45;if(Math.abs(p.x-e.x)<300)hit(25)}
+function ai(){if(e.cd)e.cd--; if(e.x>p.x+80)e.x-=1.4;else if(e.x<p.x-80)e.x+=1.4;else if(Math.random()<.025&&e.cd==0){e.cd=30;p.h=Math.max(0,p.h-10)}}
+function draw(f,enemy){x.fillStyle=enemy?'#e54b65':'#55b8ff';x.fillRect(f.x-25,f.y-90,50,90);x.fillStyle='#eee';x.fillRect(f.x-5,f.y-125,10,35);x.fillStyle='#ffd';x.fillRect(f.x+(enemy?-80:20),f.y-55,60,5)}
+function loop(){x.clearRect(0,0,900,500);p.x=Math.max(40,Math.min(860,p.x+p.v*4));ai();x.fillStyle='#252b38';x.fillRect(0,420,900,80);draw(p,0);draw(e,1);x.fillStyle='#333';x.fillRect(30,25,300,22);x.fillRect(570,25,300,22);x.fillStyle='#43e06f';x.fillRect(30,25,3*p.h,22);x.fillStyle='#e94b5b';x.fillRect(570,25,3*e.h,22);x.fillStyle='#fff';x.font='20px system-ui';x.fillText('YOU',30,70);x.fillText('RIVAL',800,70);if(p.cd)p.cd--;if(p.h<=0||e.h<=0){x.font='42px system-ui';x.fillText(e.h<=0?'YOU WIN!':'YOU LOSE!',330,230)}else requestAnimationFrame(loop)}
+loop();
+</script>
+</html>
